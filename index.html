@@ -1,0 +1,291 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080D16">
+<title>My AI Coach</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#080D16;color:white;
+ font-family:Arial,sans-serif;padding-bottom:85px
+}
+header{padding:25px 18px 15px}
+header h1{margin:0;font-size:27px}
+header p{color:#94A3B8;margin:7px 0}
+.section{padding:12px 18px}
+.section h2{font-size:19px;margin:8px 0 14px}
+.hero{
+ background:linear-gradient(135deg,#16365D,#25205B);
+ padding:22px;border-radius:20px
+}
+.hero h2{font-size:23px}
+.hero p{color:#D1D5DB;line-height:1.5}
+.grid{
+ display:grid;grid-template-columns:1fr 1fr;gap:12px
+}
+.card{
+ background:#111B29;border:1px solid #202C3C;
+ border-radius:17px;padding:17px;min-width:0
+}
+.card .emoji{font-size:27px}
+.card h3{font-size:15px;margin:12px 0 5px}
+.card p{font-size:12px;color:#94A3B8;margin:0}
+button{
+ border:0;border-radius:12px;padding:12px;
+ background:#2563EB;color:white;font-weight:bold;
+ cursor:pointer
+}
+.hero button{background:#3B82F6;margin-top:8px}
+.voice{
+ display:flex;gap:10px;margin-top:12px
+}
+.voice button{flex:1;background:#24354B}
+.bottom{
+ position:fixed;bottom:0;left:0;right:0;
+ background:#101925;border-top:1px solid #273345;
+ display:flex;justify-content:space-around;
+ padding:12px 2px;z-index:5
+}
+.bottom button{background:transparent;color:#94A3B8;padding:8px 5px;font-size:11px}
+.bottom button.active{color:#60A5FA}
+.page{display:none}
+.page.active{display:block}
+input,textarea,select{
+ width:100%;padding:13px;border-radius:10px;
+ border:1px solid #334155;background:#111B29;
+ color:white;margin:7px 0
+}
+.result{color:#60A5FA;white-space:pre-wrap}
+</style>
+</head>
+<body>
+
+<header>
+ <h1>My AI Coach ✨</h1>
+ <p>Learn • Exercise • Improve Yourself</p>
+</header>
+
+<main id="home" class="page active">
+ <div class="section">
+  <div class="hero">
+   <h2>Welcome to Your AI Coach</h2>
+   <p>Learn new languages, improve your fitness and build a better version of yourself.</p>
+   <button onclick="showPage('language')">Start Learning →</button>
+  </div>
+ </div>
+
+ <div class="section">
+  <h2>My Daily Activities</h2>
+  <div class="grid">
+   <div class="card" onclick="showPage('language')">
+    <div class="emoji">🌍</div><h3>Language</h3>
+    <p>Learn 4 languages</p>
+   </div>
+   <div class="card" onclick="showPage('fitness')">
+    <div class="emoji">💪</div><h3>Fitness</h3>
+    <p>Daily exercise</p>
+   </div>
+   <div class="card" onclick="showPage('food')">
+    <div class="emoji">🥗</div><h3>Food Planner</h3>
+    <p>Healthy meal ideas</p>
+   </div>
+   <div class="card" onclick="showPage('ai')">
+    <div class="emoji">🤖</div><h3>AI Teacher</h3>
+    <p>Practice conversation</p>
+   </div>
+  </div>
+ </div>
+</main>
+
+<section id="language" class="page">
+ <div class="section">
+  <h2>📚 Language Learning</h2>
+  <select id="lang" onchange="lesson()">
+   <option value="en-US">🇬🇧 English</option>
+   <option value="zh-CN">🇨🇳 Chinese</option>
+   <option value="ko-KR">🇰🇷 Korean</option>
+   <option value="it-IT">🇮🇹 Italian</option>
+  </select>
+  <div class="card">
+   <h3 id="word">Hello</h3>
+   <p id="meaning">বাংলা অর্থ: হ্যালো / নমস্কার</p>
+   <div class="voice">
+    <button onclick="speak('female')">👩 Female Voice</button>
+    <button onclick="speak('male')">👨 Male Voice</button>
+   </div>
+   <button style="width:100%;margin-top:15px" onclick="nextWord()">Next Lesson →</button>
+  </div>
+  <p class="result" id="voiceResult"></p>
+ </div>
+</section>
+
+<section id="fitness" class="page">
+ <div class="section">
+  <h2>💪 Daily Fitness</h2>
+  <div class="card">
+   <h3>Beginner Exercise</h3>
+   <p>• 5 minutes warm-up</p>
+   <p>• 10 squats (if comfortable)</p>
+   <p>• 5 wall push-ups</p>
+   <p>• 5 minutes walking</p>
+   <p>Start slowly and stop if you feel pain or dizziness.</p>
+  </div>
+ </div>
+</section>
+
+<section id="food" class="page">
+ <div class="section">
+  <h2>🥗 Food Planner</h2>
+  <div class="card">
+   <h3>Daily Food Ideas</h3>
+   <p>Breakfast: Egg, fruit and roti</p>
+   <p>Lunch: Rice, vegetables and protein</p>
+   <p>Dinner: Balanced light meal</p>
+   <p>Drink enough water throughout the day.</p>
+  </div>
+ </div>
+</section>
+
+<section id="ai" class="page">
+ <div class="section">
+  <h2>🤖 AI Teacher</h2>
+  <div class="card">
+   <p>Choose your learning language and practice using your voice.</p>
+   <select id="practiceLang">
+    <option value="en-US">English</option>
+    <option value="zh-CN">Chinese</option>
+    <option value="ko-KR">Korean</option>
+    <option value="it-IT">Italian</option>
+   </select>
+   <button onclick="listen()" style="width:100%">🎙️ Speak Now</button>
+   <textarea id="userText" placeholder="Your spoken words will appear here..."></textarea>
+   <button onclick="reply()" style="width:100%">Practice</button>
+   <p id="replyText" class="result"></p>
+  </div>
+ </div>
+</section>
+
+<section id="settings" class="page">
+ <div class="section">
+  <h2>⚙️ Settings</h2>
+  <div class="card">
+   <h3>My AI Coach</h3>
+   <p>Version 1.0</p>
+   <button onclick="showPage('editor')">Open Code Editor</button>
+  </div>
+ </div>
+</section>
+
+<section id="editor" class="page">
+ <div class="section">
+  <h2>💻 Code Editor</h2>
+  <div class="card">
+   <p>Edit your app code. Keep a backup before saving changes.</p>
+   <textarea id="code" rows="12" placeholder="HTML code editor"></textarea>
+   <button onclick="previewCode()">Preview Code</button>
+   <p id="editorStatus" class="result"></p>
+  </div>
+ </div>
+</section>
+
+<nav class="bottom">
+ <button class="active" onclick="showPage('home',this)">🏠<br>Home</button>
+ <button onclick="showPage('language',this)">📚<br>Learn</button>
+ <button onclick="showPage('fitness',this)">💪<br>Fitness</button>
+ <button onclick="showPage('ai',this)">🤖<br>AI</button>
+ <button onclick="showPage('settings',this)">⚙️<br>Settings</button>
+</nav>
+
+<script>
+const lessons={
+ 'en-US':[
+ ['Hello','হ্যালো / নমস্কার'],
+ ['Thank you','ধন্যবাদ'],
+ ['How are you?','তুমি কেমন আছ?']
+ ],
+ 'zh-CN':[
+ ['你好','হ্যালো'],
+ ['谢谢','ধন্যবাদ'],
+ ['你好吗？','তুমি কেমন আছ?']
+ ],
+ 'ko-KR':[
+ ['안녕하세요','হ্যালো'],
+ ['감사합니다','ধন্যবাদ'],
+ ['잘 지내세요?','তুমি কেমন আছ?']
+ ],
+ 'it-IT':[
+ ['Ciao','হ্যালো'],
+ ['Grazie','ধন্যবাদ'],
+ ['Come stai?','তুমি কেমন আছ?']
+ ]
+};
+let index=0;
+function showPage(id,btn){
+ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+ document.querySelectorAll('.bottom button').forEach(b=>b.classList.remove('active'));
+ if(btn)btn.classList.add('active');
+}
+function lesson(){
+ index=0;
+ updateLesson();
+}
+function updateLesson(){
+ let list=lessons[document.getElementById('lang').value];
+ document.getElementById('word').innerText=list[index][0];
+ document.getElementById('meaning').innerText='বাংলা অর্থ: '+list[index][1];
+}
+function nextWord(){
+ index=(index+1)%lessons[document.getElementById('lang').value].length;
+ updateLesson();
+}
+function speak(gender){
+ let text=document.getElementById('word').innerText;
+ let lang=document.getElementById('lang').value;
+ if(!('speechSynthesis' in window)){
+ alert('Voice is not supported in this browser');return;
+ }
+ speechSynthesis.cancel();
+ let utter=new SpeechSynthesisUtterance(text);
+ utter.lang=lang;
+ let voices=speechSynthesis.getVoices().filter(v=>v.lang.toLowerCase().startsWith(lang.split('-')[0].toLowerCase()));
+ let selected=voices.find(v=>gender==='female'?/female|woman/i.test(v.name):/male|man/i.test(v.name));
+ if(selected)utter.voice=selected;
+ document.getElementById('voiceResult').innerText=selected?'Selected '+gender+' voice':'Phone default voice (gender selection may not be available)';
+ speechSynthesis.speak(utter);
+}
+function listen(){
+ const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+ if(!SpeechRecognition){
+ alert('Speech recognition is not supported here. Try Chrome.');
+ return;
+ }
+ let r=new SpeechRecognition();
+ r.lang=document.getElementById('practiceLang').value;
+ r.onresult=e=>{
+ document.getElementById('userText').value=e.results[0][0].transcript;
+ };
+ r.onerror=()=>alert('Microphone recognition unavailable. Check browser permission.');
+ r.start();
+}
+function reply(){
+ let t=document.getElementById('userText').value.trim();
+ if(!t){alert('First speak or type a sentence.');return;}
+ let lang=document.getElementById('practiceLang').value;
+ let msg='Good practice! Keep speaking. This is a basic practice demo, not a connected AI response yet.';
+ document.getElementById('replyText').innerText=msg;
+ let u=new SpeechSynthesisUtterance(msg);
+ u.lang=lang;
+ speechSynthesis.speak(u);
+}
+function previewCode(){
+ document.getElementById('editorStatus').innerText='Editor preview will be connected in a later update. Your live app is unchanged.';
+}
+lesson();
+</script>
+</body>
+  </html>
+  

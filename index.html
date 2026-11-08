@@ -1,18 +1,19 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#080D16">
 <title>My AI Coach</title>
+
 <style>
 *{box-sizing:border-box}
 body{
  margin:0;background:#080D16;color:white;
  font-family:Arial,sans-serif;padding-bottom:85px
 }
-header{padding:25px 18px 15px}
+header{padding:23px 18px 12px}
 header h1{margin:0;font-size:27px}
 header p{color:#94A3B8;margin:7px 0}
 .section{padding:12px 18px}
@@ -28,28 +29,30 @@ header p{color:#94A3B8;margin:7px 0}
 }
 .card{
  background:#111B29;border:1px solid #202C3C;
- border-radius:17px;padding:17px;min-width:0
+ border-radius:17px;padding:16px;min-width:0
 }
 .card .emoji{font-size:27px}
-.card h3{font-size:15px;margin:12px 0 5px}
-.card p{font-size:12px;color:#94A3B8;margin:0}
+.card h3{font-size:16px;margin:10px 0}
+.card p{font-size:13px;color:#CBD5E1;line-height:1.6}
 button{
  border:0;border-radius:12px;padding:12px;
  background:#2563EB;color:white;font-weight:bold;
  cursor:pointer
 }
+button:disabled{opacity:.5}
 .hero button{background:#3B82F6;margin-top:8px}
-.voice{
- display:flex;gap:10px;margin-top:12px
-}
+.voice{display:flex;gap:8px;margin-top:12px}
 .voice button{flex:1;background:#24354B}
 .bottom{
  position:fixed;bottom:0;left:0;right:0;
  background:#101925;border-top:1px solid #273345;
  display:flex;justify-content:space-around;
- padding:12px 2px;z-index:5
+ padding:10px 2px;z-index:5
 }
-.bottom button{background:transparent;color:#94A3B8;padding:8px 5px;font-size:11px}
+.bottom button{
+ background:transparent;color:#94A3B8;
+ padding:8px 5px;font-size:11px
+}
 .bottom button.active{color:#60A5FA}
 .page{display:none}
 .page.active{display:block}
@@ -59,8 +62,23 @@ input,textarea,select{
  color:white;margin:7px 0
 }
 .result{color:#60A5FA;white-space:pre-wrap}
+.word-card{
+ background:#111B29;border:1px solid #26364A;
+ border-radius:14px;padding:14px;margin:10px 0
+}
+.chinese{font-size:27px;font-weight:bold}
+.pinyin{font-size:16px;color:#60A5FA;margin:7px 0}
+.meaning{font-size:14px;color:#CBD5E1}
+.word-card button{margin-top:9px;width:100%}
+.small{font-size:12px;color:#94A3B8}
+.progress{
+ height:8px;background:#26364A;border-radius:10px;
+ overflow:hidden;margin:12px 0
+}
+.progress div{height:100%;background:#22C55E;width:0%}
 </style>
 </head>
+
 <body>
 
 <header>
@@ -72,7 +90,7 @@ input,textarea,select{
  <div class="section">
   <div class="hero">
    <h2>Welcome to Your AI Coach</h2>
-   <p>Learn new languages, improve your fitness and build a better version of yourself.</p>
+   <p>Learn languages, improve fitness and build a better version of yourself.</p>
    <button onclick="showPage('language')">Start Learning →</button>
   </div>
  </div>
@@ -81,20 +99,20 @@ input,textarea,select{
   <h2>My Daily Activities</h2>
   <div class="grid">
    <div class="card" onclick="showPage('language')">
-    <div class="emoji">🌍</div><h3>Language</h3>
-    <p>Learn 4 languages</p>
+    <div class="emoji">🌍</div>
+    <h3>Language</h3><p>Learn 4 languages</p>
    </div>
    <div class="card" onclick="showPage('fitness')">
-    <div class="emoji">💪</div><h3>Fitness</h3>
-    <p>Daily exercise</p>
+    <div class="emoji">💪</div>
+    <h3>Fitness</h3><p>Daily exercise</p>
    </div>
    <div class="card" onclick="showPage('food')">
-    <div class="emoji">🥗</div><h3>Food Planner</h3>
-    <p>Healthy meal ideas</p>
+    <div class="emoji">🥗</div>
+    <h3>Food Planner</h3><p>Healthy meal ideas</p>
    </div>
    <div class="card" onclick="showPage('ai')">
-    <div class="emoji">🤖</div><h3>AI Teacher</h3>
-    <p>Practice conversation</p>
+    <div class="emoji">🤖</div>
+    <h3>AI Teacher</h3><p>Practice conversation</p>
    </div>
   </div>
  </div>
@@ -103,22 +121,46 @@ input,textarea,select{
 <section id="language" class="page">
  <div class="section">
   <h2>📚 Language Learning</h2>
+
   <select id="lang" onchange="lesson()">
+   <option value="zh-CN">🇨🇳 Chinese (Mandarin)</option>
    <option value="en-US">🇬🇧 English</option>
-   <option value="zh-CN">🇨🇳 Chinese</option>
    <option value="ko-KR">🇰🇷 Korean</option>
    <option value="it-IT">🇮🇹 Italian</option>
   </select>
+
   <div class="card">
-   <h3 id="word">Hello</h3>
-   <p id="meaning">বাংলা অর্থ: হ্যালো / নমস্কার</p>
-   <div class="voice">
-    <button onclick="speak('female')">👩 Female Voice</button>
-    <button onclick="speak('male')">👨 Male Voice</button>
-   </div>
-   <button style="width:100%;margin-top:15px" onclick="nextWord()">Next Lesson →</button>
+   <h3>🔊 Voice Settings</h3>
+   <p>Choose a voice. Your phone may not support both genders.</p>
+   <select id="gender">
+    <option value="female">👩 Female Voice</option>
+    <option value="male">👨 Male Voice</option>
+   </select>
+   <button style="width:100%" onclick="testVoice()">Test Voice</button>
   </div>
-  <p class="result" id="voiceResult"></p>
+
+  <div id="chineseArea">
+   <div class="card" style="margin-top:12px">
+    <h3>🇨🇳 Today's Chinese Lesson</h3>
+    <p id="todayDate"></p>
+    <h2 id="dayTitle">Day 1</h2>
+    <p id="wordCount">Today's 10 words</p>
+    <div class="progress"><div id="progressBar"></div></div>
+    <p class="small">১০০টি শব্দের মধ্যে ব্যবহৃত শব্দের অগ্রগতি</p>
+    <p id="usedCount" class="result"></p>
+   </div>
+   <div id="dailyWords"></div>
+  </div>
+
+  <div id="otherArea" style="display:none">
+   <div class="card">
+    <h3 id="word">Hello</h3>
+    <p id="meaning">বাংলা অর্থ: হ্যালো</p>
+    <button style="width:100%" onclick="speakCurrent()">🔊 Listen</button>
+    <button style="width:100%;margin-top:10px" onclick="nextWord()">Next Lesson →</button>
+   </div>
+  </div>
+  <p id="voiceResult" class="result"></p>
  </div>
 </section>
 
@@ -153,10 +195,10 @@ input,textarea,select{
  <div class="section">
   <h2>🤖 AI Teacher</h2>
   <div class="card">
-   <p>Choose your learning language and practice using your voice.</p>
+   <p>Practice your Chinese pronunciation using your microphone.</p>
    <select id="practiceLang">
+    <option value="zh-CN">Chinese (Mandarin)</option>
     <option value="en-US">English</option>
-    <option value="zh-CN">Chinese</option>
     <option value="ko-KR">Korean</option>
     <option value="it-IT">Italian</option>
    </select>
@@ -164,6 +206,7 @@ input,textarea,select{
    <textarea id="userText" placeholder="Your spoken words will appear here..."></textarea>
    <button onclick="reply()" style="width:100%">Practice</button>
    <p id="replyText" class="result"></p>
+   <p class="small">Note: Real AI conversation is not connected yet. This is a basic speech practice feature.</p>
   </div>
  </div>
 </section>
@@ -173,8 +216,10 @@ input,textarea,select{
   <h2>⚙️ Settings</h2>
   <div class="card">
    <h3>My AI Coach</h3>
-   <p>Version 1.0</p>
+   <p>Version 2.0</p>
    <button onclick="showPage('editor')">Open Code Editor</button>
+   <button onclick="resetProgress()" style="background:#991B1B;margin-top:12px">Reset Chinese Progress</button>
+   <p class="small">Reset করলে আগের শব্দের ইতিহাস মুছে যাবে।</p>
   </div>
  </div>
 </section>
@@ -200,92 +245,347 @@ input,textarea,select{
 </nav>
 
 <script>
-const lessons={
+/* ১০০টি আলাদা Chinese শব্দ ও বাংলা অর্থ */
+const chineseWords = [
+['你好','Nǐ hǎo','হ্যালো'],
+['谢谢','Xièxie','ধন্যবাদ'],
+['再见','Zàijiàn','বিদায়'],
+['我','Wǒ','আমি'],
+['你','Nǐ','তুমি'],
+['他','Tā','সে (পুরুষ)'],
+['她','Tā','সে (নারী)'],
+['我们','Wǒmen','আমরা'],
+['你们','Nǐmen','তোমরা'],
+['他们','Tāmen','তারা'],
+['是','Shì','হওয়া / হয়'],
+['不是','Bú shì','নয়'],
+['好','Hǎo','ভালো'],
+['不好','Bù hǎo','ভালো নয়'],
+['请','Qǐng','অনুগ্রহ করে'],
+['对不起','Duìbuqǐ','দুঃখিত'],
+['没关系','Méi guānxi','কোনো সমস্যা নেই'],
+['再','Zài','আবার'],
+['吗','Ma','প্রশ্ন বোঝাতে ব্যবহৃত হয়'],
+['不','Bù','না'],
+['水','Shuǐ','পানি'],
+['茶','Chá','চা'],
+['咖啡','Kāfēi','কফি'],
+['米饭','Mǐfàn','ভাত'],
+['面条','Miàntiáo','নুডলস'],
+['苹果','Píngguǒ','আপেল'],
+['水果','Shuǐguǒ','ফল'],
+['吃','Chī','খাওয়া'],
+['喝','Hē','পান করা'],
+['饭','Fàn','খাবার / ভাত'],
+['家','Jiā','বাড়ি'],
+['学校','Xuéxiào','স্কুল'],
+['朋友','Péngyou','বন্ধু'],
+['老师','Lǎoshī','শিক্ষক'],
+['学生','Xuésheng','শিক্ষার্থী'],
+['中国','Zhōngguó','চীন'],
+['中文','Zhōngwén','চীনা ভাষা'],
+['英语','Yīngyǔ','ইংরেজি ভাষা'],
+['名字','Míngzi','নাম'],
+['什么','Shénme','কী'],
+['谁','Shéi','কে'],
+['哪里','Nǎlǐ','কোথায়'],
+['这里','Zhèlǐ','এখানে'],
+['那里','Nàlǐ','সেখানে'],
+['今天','Jīntiān','আজ'],
+['明天','Míngtiān','আগামীকাল'],
+['昨天','Zuótiān','গতকাল'],
+['现在','Xiànzài','এখন'],
+['时间','Shíjiān','সময়'],
+['早上','Zǎoshang','সকাল'],
+['晚上','Wǎnshang','রাত / সন্ধ্যা'],
+['一','Yī','এক'],
+['二','Èr','দুই'],
+['三','Sān','তিন'],
+['四','Sì','চার'],
+['五','Wǔ','পাঁচ'],
+['六','Liù','ছয়'],
+['七','Qī','সাত'],
+['八','Bā','আট'],
+['九','Jiǔ','নয়'],
+['十','Shí','দশ'],
+['大','Dà','বড়'],
+['小','Xiǎo','ছোট'],
+['多','Duō','অনেক'],
+['少','Shǎo','কম'],
+['快','Kuài','দ্রুত'],
+['慢','Màn','ধীরে'],
+['热','Rè','গরম'],
+['冷','Lěng','ঠান্ডা'],
+['开心','Kāixīn','খুশি'],
+['喜欢','Xǐhuan','পছন্দ করা'],
+['爱','Ài','ভালোবাসা'],
+['看','Kàn','দেখা'],
+['听','Tīng','শোনা'],
+['说','Shuō','বলা'],
+['读','Dú','পড়া'],
+['写','Xiě','লেখা'],
+['学习','Xuéxí','শেখা'],
+['工作','Gōngzuò','কাজ'],
+['买','Mǎi','কেনা'],
+['卖','Mài','বিক্রি করা'],
+['钱','Qián','টাকা'],
+['手机','Shǒujī','মোবাইল ফোন'],
+['电脑','Diànnǎo','কম্পিউটার'],
+['车','Chē','গাড়ি'],
+['路','Lù','রাস্তা'],
+['门','Mén','দরজা'],
+['桌子','Zhuōzi','টেবিল'],
+['椅子','Yǐzi','চেয়ার'],
+['书','Shū','বই'],
+['猫','Māo','বিড়াল'],
+['狗','Gǒu','কুকুর'],
+['人','Rén','মানুষ'],
+['男人','Nánrén','পুরুষ'],
+['女人','Nǚrén','নারী'],
+['孩子','Háizi','শিশু'],
+['爸爸','Bàba','বাবা'],
+['妈妈','Māma','মা'],
+['哥哥','Gēge','বড় ভাই'],
+['姐姐','Jiějie','বড় বোন']
+];
+
+const otherLessons = {
  'en-US':[
- ['Hello','হ্যালো / নমস্কার'],
- ['Thank you','ধন্যবাদ'],
- ['How are you?','তুমি কেমন আছ?']
- ],
- 'zh-CN':[
- ['你好','হ্যালো'],
- ['谢谢','ধন্যবাদ'],
- ['你好吗？','তুমি কেমন আছ?']
+  ['Hello','হ্যালো'],['Thank you','ধন্যবাদ'],
+  ['How are you?','তুমি কেমন আছ?']
  ],
  'ko-KR':[
- ['안녕하세요','হ্যালো'],
- ['감사합니다','ধন্যবাদ'],
- ['잘 지내세요?','তুমি কেমন আছ?']
+  ['안녕하세요','হ্যালো'],['감사합니다','ধন্যবাদ'],
+  ['잘 지내세요?','তুমি কেমন আছ?']
  ],
  'it-IT':[
- ['Ciao','হ্যালো'],
- ['Grazie','ধন্যবাদ'],
- ['Come stai?','তুমি কেমন আছ?']
+  ['Ciao','হ্যালো'],['Grazie','ধন্যবাদ'],
+  ['Come stai?','তুমি কেমন আছ?']
  ]
 };
+
 let index=0;
+
 function showPage(id,btn){
  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
  document.getElementById(id).classList.add('active');
  document.querySelectorAll('.bottom button').forEach(b=>b.classList.remove('active'));
  if(btn)btn.classList.add('active');
 }
-function lesson(){
- index=0;
- updateLesson();
+
+function localDate(){
+ const d=new Date();
+ return d.getFullYear()+'-'+
+ String(d.getMonth()+1).padStart(2,'0')+'-'+
+ String(d.getDate()).padStart(2,'0');
 }
-function updateLesson(){
- let list=lessons[document.getElementById('lang').value];
- document.getElementById('word').innerText=list[index][0];
- document.getElementById('meaning').innerText='বাংলা অর্থ: '+list[index][1];
+
+function getUsed(){
+ try{
+  return JSON.parse(localStorage.getItem('chineseUsedWords')||'[]');
+ }catch(e){return [];}
 }
-function nextWord(){
- index=(index+1)%lessons[document.getElementById('lang').value].length;
- updateLesson();
-}
-function speak(gender){
- let text=document.getElementById('word').innerText;
- let lang=document.getElementById('lang').value;
- if(!('speechSynthesis' in window)){
- alert('Voice is not supported in this browser');return;
+
+function getDailyBatch(){
+ const today=localDate();
+ let savedDate=localStorage.getItem('chineseBatchDate');
+ let savedBatch=localStorage.getItem('chineseDailyBatch');
+
+ if(savedDate===today && savedBatch){
+  try{return JSON.parse(savedBatch);}catch(e){}
  }
+
+ let used=getUsed();
+ let remaining=chineseWords
+  .map((word,i)=>i)
+  .filter(i=>!used.includes(i));
+
+ /* শব্দ শেষ হলে নতুন শব্দ না যোগ করা পর্যন্ত পুনরাবৃত্তি হবে না */
+ let batch=remaining.slice(0,10);
+
+ localStorage.setItem('chineseBatchDate',today);
+ localStorage.setItem('chineseDailyBatch',JSON.stringify(batch));
+
+ let updated=[...used,...batch];
+ localStorage.setItem('chineseUsedWords',JSON.stringify(updated));
+
+ return batch;
+}
+
+function renderChinese(){
+ const batch=getDailyBatch();
+ const today=localDate();
+ const used=getUsed();
+
+ document.getElementById('todayDate').innerText='তারিখ: '+today;
+ document.getElementById('dayTitle').innerText=
+  'Day '+Math.ceil(used.length/10 || 1);
+
+ document.getElementById('wordCount').innerText=
+  'আজকের নতুন শব্দ: '+batch.length+'টি';
+
+ document.getElementById('usedCount').innerText=
+  'ব্যবহৃত শব্দ: '+used.length+' / '+chineseWords.length;
+
+ document.getElementById('progressBar').style.width=
+  (used.length/chineseWords.length*100)+'%';
+
+ const area=document.getElementById('dailyWords');
+ area.innerHTML='';
+
+ if(batch.length===0){
+  area.innerHTML='<div class="card"><h3>🎉 সব শব্দ শেষ!</h3><p>১০০টি শব্দ শেখা শেষ হয়েছে। নতুন শব্দের তালিকা যোগ করতে হবে।</p></div>';
+  return;
+ }
+
+ batch.forEach((word,position)=>{
+  const card=document.createElement('div');
+  card.className='word-card';
+
+  const title=document.createElement('div');
+  title.className='chinese';
+  title.textContent=(position+1)+'. '+word[0];
+
+  const pinyin=document.createElement('div');
+  pinyin.className='pinyin';
+  pinyin.textContent=word[1];
+
+  const meaning=document.createElement('div');
+  meaning.className='meaning';
+  meaning.textContent='বাংলা অর্থ: '+word[2];
+
+  const btn=document.createElement('button');
+  btn.textContent='🔊 উচ্চারণ শুনুন';
+  btn.onclick=()=>speakText(word[0],'zh-CN');
+
+  card.append(title,pinyin,meaning,btn);
+  area.appendChild(card);
+ });
+}
+
+function lesson(){
+ const lang=document.getElementById('lang').value;
+ const chinese=lang==='zh-CN';
+
+ document.getElementById('chineseArea').style.display=
+  chinese?'block':'none';
+ document.getElementById('otherArea').style.display=
+  chinese?'none':'block';
+
+ if(chinese){
+  renderChinese();
+ }else{
+  index=0;
+  updateLesson();
+ }
+}
+
+function updateLesson(){
+ const lang=document.getElementById('lang').value;
+ const list=otherLessons[lang];
+ document.getElementById('word').innerText=list[index][0];
+ document.getElementById('meaning').innerText=
+  'বাংলা অর্থ: '+list[index][1];
+}
+
+function nextWord(){
+ const lang=document.getElementById('lang').value;
+ const list=otherLessons[lang];
+ index=(index+1)%list.length;
+ updateLesson();
+}
+
+function speakText(text,lang){
+ if(!('speechSynthesis' in window)){
+  alert('এই ব্রাউজারে Voice support নেই। Chrome ব্যবহার করো।');
+  return;
+ }
+
  speechSynthesis.cancel();
- let utter=new SpeechSynthesisUtterance(text);
+ const utter=new SpeechSynthesisUtterance(text);
  utter.lang=lang;
- let voices=speechSynthesis.getVoices().filter(v=>v.lang.toLowerCase().startsWith(lang.split('-')[0].toLowerCase()));
- let selected=voices.find(v=>gender==='female'?/female|woman/i.test(v.name):/male|man/i.test(v.name));
+
+ const gender=document.getElementById('gender').value;
+ const voices=speechSynthesis.getVoices().filter(
+  v=>v.lang.toLowerCase().startsWith(lang.split('-')[0].toLowerCase())
+ );
+
+ let selected=voices.find(v=>
+  gender==='female'?
+  /female|woman/i.test(v.name):
+  /male|man/i.test(v.name)
+ );
+
  if(selected)utter.voice=selected;
- document.getElementById('voiceResult').innerText=selected?'Selected '+gender+' voice':'Phone default voice (gender selection may not be available)';
+ utter.rate=0.8;
+
+ document.getElementById('voiceResult').innerText=
+  selected?'Selected '+gender+' voice':
+  'ফোনের ডিফল্ট কণ্ঠ ব্যবহার হচ্ছে। আলাদা কণ্ঠ ফোনে নাও থাকতে পারে।';
+
  speechSynthesis.speak(utter);
 }
+
+function speakCurrent(){
+ const lang=document.getElementById('lang').value;
+ speakText(document.getElementById('word').innerText,lang);
+}
+
+function testVoice(){
+ const lang=document.getElementById('lang').value;
+ const sample=lang==='zh-CN'?'你好':
+  lang==='en-US'?'Hello':
+  lang==='ko-KR'?'안녕하세요':'Ciao';
+ speakText(sample,lang);
+}
+
 function listen(){
- const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+ const SpeechRecognition=window.SpeechRecognition||
+  window.webkitSpeechRecognition;
+
  if(!SpeechRecognition){
- alert('Speech recognition is not supported here. Try Chrome.');
- return;
+  alert('Speech recognition এই ব্রাউজারে নেই। Chrome ব্যবহার করো।');
+  return;
  }
- let r=new SpeechRecognition();
+
+ const r=new SpeechRecognition();
  r.lang=document.getElementById('practiceLang').value;
  r.onresult=e=>{
- document.getElementById('userText').value=e.results[0][0].transcript;
+  document.getElementById('userText').value=
+   e.results[0][0].transcript;
  };
- r.onerror=()=>alert('Microphone recognition unavailable. Check browser permission.');
+ r.onerror=()=>alert('Microphone permission পরীক্ষা করো।');
  r.start();
 }
+
 function reply(){
- let t=document.getElementById('userText').value.trim();
- if(!t){alert('First speak or type a sentence.');return;}
- let lang=document.getElementById('practiceLang').value;
- let msg='Good practice! Keep speaking. This is a basic practice demo, not a connected AI response yet.';
- document.getElementById('replyText').innerText=msg;
- let u=new SpeechSynthesisUtterance(msg);
- u.lang=lang;
- speechSynthesis.speak(u);
+ const t=document.getElementById('userText').value.trim();
+ if(!t){alert('আগে কথা বলো অথবা কিছু লিখো।');return;}
+
+ document.getElementById('replyText').innerText=
+  'তোমার অনুশীলন রেকর্ড হয়েছে: '+t+
+  '\nএটি এখনো Demo Practice। প্রকৃত AI Tutor এখনো সংযুক্ত নয়।';
 }
+
 function previewCode(){
- document.getElementById('editorStatus').innerText='Editor preview will be connected in a later update. Your live app is unchanged.';
+ document.getElementById('editorStatus').innerText=
+  'Editor preview পরবর্তী আপডেটে যুক্ত করা হবে।';
 }
+
+function resetProgress(){
+ if(!confirm('তোমার Chinese শেখার সব ইতিহাস মুছে ফেলবে?'))return;
+ localStorage.removeItem('chineseUsedWords');
+ localStorage.removeItem('chineseBatchDate');
+ localStorage.removeItem('chineseDailyBatch');
+ renderChinese();
+ alert('Chinese progress reset হয়েছে।');
+}
+
+if('speechSynthesis' in window){
+ speechSynthesis.getVoices();
+}
+
 lesson();
 </script>
 </body>
-  </html>
-  
+</html>
